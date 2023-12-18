@@ -1,47 +1,67 @@
-import  React from 'react'; 
-
+import React from "react";
+import { useState } from "react";
+import DataTable from "react-data-table-component";
+import { getSieuThiList } from "../../api/api.js";
 
 const SieuThiList = () => {
-  // Dữ liệu mẫu về các siêu thị
-  const storeData = [
+  const columns = [
     {
-      ma: 'ST001',
-      ten: 'Siêu Thị A',
-      tinh: 'Tỉnh A',
-      quan: 'Quận 1',
-      huyen: 'Huyện X',
-      diaChi: '123 Đường ABC, Quận 1, Tỉnh A',
+      name: "MaST",
+      selector: "maST",
+      sortable: true,
     },
-    // Thêm dữ liệu cho các siêu thị khác
+    {
+      name: "TenST",
+      selector: "tenST",
+      sortable: true,
+    },
+    {
+      name: "DCST",
+      selector: "dcST",
+      sortable: true,
+    },
+    {
+      name: "NguoiCN",
+      selector: "nguoiCN",
+      sortable: true,
+    },
   ];
 
+  const [sieuthi, setSieuThi] = useState();
+
+  const GetSieuThiList = async () => {
+    try {
+      const res = await getSieuThiList({
+        page: 1,
+        pageSize: 10,
+        // keyword: "string",
+        // rageDate: {
+        //   fromDate: "2023-12-18T15:30:58.326Z",
+        //   toDate: "2023-12-18T15:30:58.326Z",
+        // },
+        // tinhst: "string",
+        // huyenst: "string",
+        // xast: "string",
+      });
+      setSieuThi(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Mã</th>
-          <th>Tên</th>
-          <th>Tỉnh</th>
-          <th>Quận</th>
-          <th>Huyện</th>
-          <th>Địa Chỉ</th>
-        </tr>
-      </thead>
-      <tbody>
-        {storeData.map((store) => (
-          <tr key={store.ma}>
-            <td>{store.ma}</td>
-            <td>{store.ten}</td>
-            <td>{store.tinh}</td>
-            <td>{store.quan}</td>
-            <td>{store.huyen}</td>
-            <td>{store.diaChi}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div>
+      <button onClick={GetSieuThiList}> Submit to show store list</button>
+      <p>Tổng số Siêu Thị {sieuthi?.totalCount}</p>
+      <DataTable
+        title="Sieu Thi Data"
+        columns={columns}
+        data={sieuthi?.sieuThi}
+        pagination
+        highlightOnHover
+      />
+    </div>
   );
 };
 
-
-export default SieuThiList
+export default SieuThiList;
