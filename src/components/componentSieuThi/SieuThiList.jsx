@@ -4,7 +4,7 @@ import DataTable from "react-data-table-component";
 import { getSieuThiList } from "../../api/api.js";
 
 const SieuThiList = () => {
-  const title = "Submit to show store list";
+  const title = "Submit to show store list Ok";
   const keyword = useRef("");
   const size = useRef(5);
   const page = useRef(1);
